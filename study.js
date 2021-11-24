@@ -397,7 +397,7 @@ var trialCalibrationTemplate = new lab.flow.Sequence({
         response = true
         if (Object.keys(responses).includes(e.key)) {
           this.data.response = e.key
-          this.data.reaction_time = e.timeStamp
+          this.data.reaction_time = e.timeStamp - this.internals.timestamps.show
           // Set the correct response
           this.data.correct = this.aggregateParameters.color === responses[e.key]
         }
