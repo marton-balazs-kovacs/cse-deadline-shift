@@ -1,8 +1,153 @@
-// Define the sequence of components that define the study
+// Utils ----------------------------------------------------------
+// Calculate range
+function range(stop) {
+  var result = [];
+  for (var i = 0; i < stop; i += 1) {
+    result.push(i);
+  }
+  return result;
+}
+
+// Shuffle the content of an array
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+
+    // Generate random number
+    var j = Math.floor(Math.random() * (i + 1));
+
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+
+  return array;
+}
+
+// calculate the average of an array
+const average = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+
+// Countdown screen page function
+const countdownPage = function (countdown) {
+  // Create countdown array
+  var countdowns = [];
+  for (var i = 1; i <= countdown; i += 1) {
+    countdowns.unshift({ count: i });
+  }
+  // Create screen for one count
+  const countScreen = new lab.html.Screen({
+    content: '<h1>${parameters.count}</h1>',
+    timeout: 1000,
+    datacommit: false
+  })
+  // Loop over screens
+  return new lab.flow.Loop({
+    template: countScreen,
+    templateParameters: countdowns,
+    shuffle: false
+  })
+}
+
+// Create pseudo-random trial orders ----------------------------------------------------------
+// For the test trials
+var redBlock = [[["ZÖLD", "green", "con", "c"], ["PIROS", "red", "con", "x"]], [["PIROS", "green", "inc", "c"], ["ZÖLD", "red", "inc", "x"]]]
+var blueBlock = [[["KÉK", "blue", "con", "n"], ["SÁRGA", "yellow", "con", "m"]], [["KÉK", "yellow", "inc", "n"], ["SÁRGA", "blue", "inc", "m"]]]
+
+function getRandomTrials(numberOfTrials, addFirstTrial) {
+  var repetition = numberOfTrials / 8
+
+  var listOne = []
+  for (i in range(repetition)) {
+    for (j in range(redBlock.length)) {
+      for (k in range(redBlock[j].length)) {
+        listOne.push(redBlock[j][k])
+      }
+    }
+  }
+
+  listOne = shuffleArray(listOne)
+
+  var listTwo = []
+  for (i in range(repetition)) {
+    for (j in range(blueBlock.length)) {
+      for (k in range(blueBlock[j].length)) {
+        listTwo.push(blueBlock[j][k])
+      }
+    }
+  }
+
+  listTwo = shuffleArray(listTwo)
+
+  var trialList = []
+  for (i in range(listOne.length)) {
+    trialList.push(listOne[i])
+    trialList.push(listTwo[i])
+  }
+
+  var loopData = []
+  trialList.forEach(element => {
+    loopData.push({ word: element[0], color: element[1], congruency: element[2], correctResponse: element[3] });
+  });
+
+  // Add one random in the beginning as the first trial
+  if (addFirstTrial) {
+    const firstTrial = blueBlock[Math.floor(Math.random() * 2)][Math.floor(Math.random() * 2)]
+    loopData.unshift({ word: firstTrial[0], color: firstTrial[1], congruency: firstTrial[2], correctResponse: firstTrial[3] })
+  }
+
+  return loopData
+}
+
+const testLoopData = [
+  { blockId: '1', testTrialset: getRandomTrials(8, true), calibrationTrialset: getRandomCalbirationTrials(4) },
+  { blockId: '2', testTrialset: getRandomTrials(8, true), calibrationTrialset: getRandomCalbirationTrials(4) },
+  { blockId: '3', testTrialset: getRandomTrials(8, true), calibrationTrialset: getRandomCalbirationTrials(4) },
+  { blockId: '4', testTrialset: getRandomTrials(8, true), calibrationTrialset: getRandomCalbirationTrials(4) },
+]
+
+// For the calibration trials
+function getRandomCalbirationTrials(numberOfTrials) {
+  const repetition = numberOfTrials / 4
+
+  var listCalibrationOne = []
+  for (i in range(repetition)) {
+    for (k in range(redBlock[0].length)) {
+      listCalibrationOne.push(redBlock[0][k])
+    }
+  }
+
+  listCalibrationOne = shuffleArray(listCalibrationOne)
+
+  var listCalibrationTwo = []
+  for (i in range(repetition)) {
+    for (k in range(blueBlock[0].length)) {
+      listCalibrationTwo.push(blueBlock[0][k])
+    }
+  }
+
+  listCalibrationTwo = shuffleArray(listCalibrationTwo)
+
+  var trialCalibrationList = []
+  for (i in range(listCalibrationOne.length)) {
+    trialCalibrationList.push(listCalibrationOne[i])
+    trialCalibrationList.push(listCalibrationTwo[i])
+  }
+
+  var calibrationLoopData = []
+  trialCalibrationList.forEach(element => {
+    calibrationLoopData.push({ word: element[0], color: element[1], congruency: element[2], correctResponse: element[3] });
+  })
+
+  return calibrationLoopData
+}
+
+// For practice trials
+const practiceLoopData = getRandomTrials(24)
+
+// Create screens ----------------------------------------------------------
 // Create inform screen
 const informScreen = new lab.html.Screen({
   title: "inform",
-  content: 
+  content:
     `
     <div> 
     <h1>Tájékoztató nyilatkozat</h1> 
@@ -164,338 +309,6 @@ const instructionsScreen = new lab.html.Screen({
   }
 })
 
-// Define a template for a test stroop trial
-var testTrialContent = ' \
-<div style="font-size: 36px; font-weight: ${ parameters.weight }; color: ${ parameters.color }"> \
-${ parameters.word } \
-</div> \
-'
-
-// Define a template for a practice stroop trial
-const practiceTrialContent = ' \
-<div style="font-size: 36px; font-weight: ${ parameters.weight }; color: ${ parameters.color }"> \
-${ parameters.word } \
-<br> \
-<div style="display: inline-block; color:black;"> \
-  x = <span class="dot" style="color:red;"></span> c = <span class="dot" style="color:green;"></span>  n = <span class="dot" style="color:blue"></span>  x = <span class="dot" style="color:yellow;"></span> \
-</div> \
-</div> \
-' 
-// Define sequence for one trial for test
-var trialTestTemplate = new lab.flow.Sequence({
-  title: 'StroopTestTrial',
-  content: [
-    // Trial screen ------------------------------------------------------------
-    // The display the first screen participants respond to.
-    new lab.html.Screen({
-      // This screen is assigned a title,
-      // so that we can recognize it more easily
-      // in the dataset.
-      title: 'StroopTestScreen',
-      // Again, we use the trial page template
-      content: testTrialContent,
-      parameters: {
-        // Color and displayed word
-        // are determined by the trial
-        weight: 'bold'
-      },
-      // The display terminates after 250ms
-      timeout: 250,
-      datacommit: false
-    }),
-    // Fixation cross ----------------------------------------------------------
-    // Participants can still respond during the fixation cross
-    new lab.html.Screen({
-      title: 'stroopTestFixation', 
-      content: testTrialContent,
-      parameters: {
-        color: 'gray',
-        word: '+',
-        weight: 'normal',
-      },
-      // Display the fixation cross depends on the participants own deadline
-      timeout: 1000,
-      datacommit: false
-    })
-  ],
-  // Because we want to wait until the timeout with proceeding we need to set the responses by hand
-  messageHandlers: {
-  'before:prepare': function() {
-    // Each possible color response is associated with a key
-    const responses = {
-      'x': 'red',
-      'c': 'green',
-      'n': 'blue',
-      'm': 'yellow',
-    }
-    // console.log(Object.keys(responses))
-    let response = false
-    this.options.events['keypress'] = function(e) {
-      if (!response) {
-        response = true
-        if (Object.keys(responses).includes(e.key)) {
-          this.data.response = e.key
-          this.data.reaction_time = e.timeStamp
-        } else {
-          
-        }
-
-      }
-    }
-  //   // Set the correct response before the component is prepared
-  //   // this.options.correctResponse = this.aggregateParameters.color
-  //   }
-  //   // 'run': function() {
-  //   //   // document.addEventListener('keyup', (e) => {
-  //   //   //   console.log(e.key)
-  //   //   // })
-    }
-  }
-})
-
-// Define sequence for one trial for practice
-var trialPracticeTemplate = new lab.flow.Sequence({
-  datacommit: false,
-  content: [
-    // Trial screen ------------------------------------------------------------
-    // The display the first screen participants respond to.
-    new lab.html.Screen({
-      title: 'StroopPracticeScreen',
-      content: practiceTrialContent,
-      parameters: {
-        // Color and displayed word
-        // are determined by the trial
-        weight: 'bold'
-      },
-      // Each possible color response is
-      // associated with a key
-      responses: {
-        'keypress(x)': 'red',
-        'keypress(c)': 'green',
-        'keypress(n)': 'blue',
-        'keypress(m)': 'yellow',
-      },
-      // The display terminates after 250ms
-      timeout: 250,
-      // Because the color is set dynamically,
-      // we need to set the correct response by hand
-      messageHandlers: {
-        'before:prepare': function() {
-          // Set the correct response
-          // before the component is prepared
-          this.options.correctResponse = this.aggregateParameters.color
-          
-        },
-      }
-    }),
-    // Fixation cross ----------------------------------------------------------
-    // Participants can still respond during the fixation cross
-    new lab.html.Screen({
-      title: 'stroopPracticeFixation',
-      content: practiceTrialContent,
-      parameters: {
-        color: 'gray',
-        word: '+',
-        weight: 'normal',
-      },
-      // Don't log data from this screen
-      datacommit: false
-      // Display the fixation cross limitless because of practice
-    }),
-    // Feedback (or empty) screen for practice only ----------------------------------------------
-    new lab.html.Screen({
-      content: practiceTrialContent,
-      parameters: {
-        color: 'gray',
-        word: '', // This is a placeholder, we generate the word below
-        weight: 'normal',
-      },
-      datacommit: false,
-      // Because feedback can only be given after
-      // the choice has been recorded, this component
-      // is prepared at the last possible moment.
-      tardy: true,
-      // Generate feedback
-      messageHandlers: {
-        'before:prepare': function() {
-            // Generate feedback if requested
-            this.options.timeout = 1000
-
-            // First, check if the participant responded in time at all
-            if (this.options.datastore.state['ended_on'] === 'response') {
-              // If there is a response, check its veracity
-              if (this.options.datastore.state['correct'] === true) {
-                this.options.parameters.word = 'Well done!'
-              } else {
-                this.options.parameters.word = 'Please respond as quickly and accurately as you can!'
-              }
-            } else {
-              // If no response was given, poke participants to speed up
-              this.options.parameters.word = 'Can you go faster?'
-            }
-        }
-      }
-    })
-  ]
-})
-
-// calculate the average of an array
-const average = arr => arr.reduce((a,b) => a + b, 0) / arr.length;
-
-// Define sequence for one trial for calibration
-var trialCalibrationTemplate = new lab.flow.Sequence({
-  title: 'StroopCalibrationTrial',
-  content: [
-    // Trial screen ------------------------------------------------------------
-    // The display the first screen participants respond to.
-    new lab.html.Screen({
-      // This screen is assigned a title,
-      // so that we can recognize it more easily
-      // in the dataset.
-      title: 'StroopCalibrationScreen',
-      // Again, we use the trial page template
-      content: testTrialContent,
-      parameters: {
-        // Color and displayed word
-        // are determined by the trial
-        weight: 'bold'
-      },
-      // The display terminates after 250ms
-      timeout: 250,
-      datacommit: false
-    }),
-    // Fixation cross ----------------------------------------------------------
-    // Participants can still respond during the fixation cross
-    new lab.html.Screen({
-      title: 'stroopCalibrationFixation', 
-      content: testTrialContent,
-      parameters: {
-        color: 'gray',
-        word: '+',
-        weight: 'normal',
-      },
-      // Display the fixation cross depends on the participants own deadline
-      timeout: 1000,
-      datacommit: false
-    })
-  ],
-  // Because we want to wait until the timeout with proceeding we need to set the responses by hand
-  messageHandlers: {
-  'before:prepare': function() {
-    // Each possible color response is associated with a key
-    const responses = {
-      'x': 'red',
-      'c': 'green',
-      'n': 'blue',
-      'm': 'yellow',
-    }
-
-    // Set response if key is pressed
-    let response = false
-    this.options.events['keypress'] = function(e) {
-      if (!response) {
-        response = true
-        if (Object.keys(responses).includes(e.key)) {
-          this.data.response = e.key
-          this.data.reaction_time = e.timeStamp - this.internals.timestamps.show
-          // Set the correct response
-          this.data.correct = this.aggregateParameters.color === responses[e.key]
-        }
-      }
-    }
-    // Save congruency of the trial
-    this.data.congruency = this.aggregateParameters.congruency
-  }
-}
-})
-
-function personalDeadline () {
-  // Get only correct trials
-  // Get only congruent trials
-  // Calulate the average reaction time
-
-   //var personalDeadline = average()
-}
-
-// Define the trials in terms of the central parameters
-function range(stop) {
-  var result = [];
-  for (var i = 0; i < stop; i += 1) {
-      result.push(i);
-  }
-  return result;
-}
-
-function shuffleArray(array) {
-  for (var i = array.length - 1; i > 0; i--) {
-  
-      // Generate random number
-      var j = Math.floor(Math.random() * (i + 1));
-                  
-      var temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
-  }
-      
-  return array;
-}
-
-var redBlock = [[["green","green","con","c"], ["red","red","con","x"]], [["red","green","inc","c"], ["green","red","inc","x"]]]
-var blueBlock = [[["blue","blue","con","n"], ["yellow","yellow","con","m"]], [["blue","yellow","inc","n"], ["yellow","blue","inc","m"]]]
-
-var listOne = []
-for (i in range(10)) {
-for (j in range(redBlock.length)) {
-  for (k in range(redBlock[j].length)) {
-    listOne.push(redBlock[j][k])
-      }
-  }
-}
-
-listOne = shuffleArray(listOne)
-
-var listTwo = []
-for (i in range(10)) {
-for (j in range(blueBlock.length)) {
-  for (k in range(blueBlock[j].length)) {
-    listTwo.push(blueBlock[j][k])
-      }
-  }
-}
-
-listTwo = shuffleArray(listTwo)
-
-var trialList = []
-for (i in range(listOne.length)) {
-trialList.push(listOne[i])
-trialList.push(listTwo[i])
-}
-
-var testLoop = []
-trialList.forEach(element => {
-  testLoop.push({word: element[0], color: element[1], congruent: element[2]});
-});
-
-// The word shown on screen, and its color for testing the code
-var trials = [
-  { color: 'red', word: 'red' },
-  { color: 'green', word: 'red' },
-  { color: 'blue', word: 'red' },
-  { color: 'yellow', word: 'yellow' }
-]
-
-// Loop for personal calibration
-var calibrationLoopData = [
-  { word: 'PIROS', color: 'red', correctResponse: 'x', congruency: 'con'},
-  { word: 'PIROS', color: 'green', correctResponse: 'c', congruency: 'inc'},
-  { word: 'ZÖLD', color: 'red', correctResponse: 'x', congruency: 'inc'},
-  { word: 'ZÖLD', color: 'green', correctResponse: 'c', congruency: 'con'},
-  { word: 'KÉK', color: 'blue', correctResponse: 'n', congruency: 'con'},
-  { word: 'KÉK', color: 'yellow', correctResponse: 'm', congruency: 'inc'},
-  { word: 'SÁRGA', color: 'blue', correctResponse: 'n', congruency: 'inc'},
-  { word: 'SÁRGA', color: 'yellow', correctResponse: 'm', congruency: 'con'}
-]
-
 // Table for key-response mapping
 const keyResponseMapping = `
 <table>
@@ -527,46 +340,102 @@ const keyResponseMapping = `
 </table>
 `
 
-// TODO: create blocks
-// Between block page
-const betweenBlockScreen = new lab.html.Screen({
-  content: `
-  <div>
-  <h2>Ez a szakasz véget ért.</2>
-  <p>
-    A következő előtt tarthatsz egy rövid szünetet.
-    A folytatáshoz helyezd az ujjaid a megfelelő gombokra és nyomj meg egy billentyűt!
-  </p>
-  ${keyResponseMapping}
-  </div>
-  `,
-  responses: {
-    'keypress(x)': 'red',
-    'keypress(c)': 'green',
-    'keypress(n)': 'blue',
-    'keypress(m)': 'yellow',
-  }
-})
+// Define a template for a test stroop trial
+var testTrialContent = ' \
+<div style="font-size: 36px; font-weight: ${ parameters.weight }; color: ${ parameters.color }"> \
+${ parameters.word } \
+</div> \
+'
 
-// Countdown screen page function
-const countdownPage = function(countdown) {
-  // Create countdown array
-  var countdowns = [];
-  for (var i = 1; i <= countdown; i += 1) {
-    countdowns.unshift({count: i});
-  }
-  // Create screen for one count
-  const countScreen = new lab.html.Screen({
-    content: '<h1>${parameters.count}</h1>',
-    timeout: 1000
-  })
-  // Loop over screens
-  return new lab.flow.Loop({
-    template: countScreen,
-    templateParameters: countdowns,
-    shuffle: false
-  })
-}
+// Define a template for a practice stroop trial
+const practiceTrialContent = ' \
+<div style="font-size: 36px; font-weight: ${ parameters.weight }; color: ${ parameters.color }"> \
+${ parameters.word } \
+<br> \
+<div style="display: inline-block; color:black; font-weight:normal;"> \
+  x = <span class="dot" style="background-color:red;"></span> c = <span class="dot" style="background-color:green;"></span>  n = <span class="dot" style="background-color:blue"></span>  m = <span class="dot" style="background-color:yellow;"></span> \
+</div> \
+</div> \
+' 
+
+// Define sequence for one trial for practice
+var trialPracticeTemplate = new lab.flow.Sequence({
+  content: [
+    new lab.flow.Sequence({
+      title: 'StroopPracticeTrial',
+      content: [
+        // Trial screen
+        // The display the first screen participants respond to.
+        new lab.html.Screen({
+          title: 'StroopPracticeScreen',
+          content: practiceTrialContent,
+          parameters: {
+            // Color and displayed word
+            // are determined by the trial
+            weight: 'bold'
+          },
+          datacommit: false,
+          // The display terminates after 250ms
+          timeout: 250
+        }),
+        // Fixation cross
+        // Participants can still respond during the fixation cross
+        new lab.html.Screen({
+          title: 'stroopPracticeFixation',
+          content: practiceTrialContent,
+          parameters: {
+            color: 'gray',
+            word: '+',
+            weight: 'normal',
+          },
+          // Don't log data from this screen
+          datacommit: false
+          // Display the fixation cross limitless because of practice
+        })
+      ],
+      responses: {
+        'keypress(x)': 'red',
+        'keypress(c)': 'green',
+        'keypress(n)': 'blue',
+        'keypress(m)': 'yellow',
+      },
+      messageHandlers: {
+        'before:prepare': function () {
+          // Set the correct response
+          this.options.correctResponse = this.aggregateParameters.color
+          // Save congruency of the trial
+          this.data.congruency = this.aggregateParameters.congruency
+        }
+      }
+    }),
+    // Feedback (or empty) screen for practice only 
+    new lab.html.Screen({
+      content: practiceTrialContent,
+      parameters: {
+        color: 'gray',
+        word: '', // This is a placeholder, we generate the word below
+        weight: 'normal',
+      },
+      datacommit: false,
+      timeout: 1000,
+      // Because feedback can only be given after
+      // the choice has been recorded, this component
+      // is prepared at the last possible moment.
+      tardy: true,
+      // Generate feedback
+      messageHandlers: {
+        'before:prepare': function () {
+          // If there is a response, check its veracity
+          if (this.options.datastore.state['correct'] === true) {
+            this.options.parameters.word = 'Helyes'
+          } else {
+            this.options.parameters.word = 'Helytelen'
+          }
+        }
+      }
+    })
+  ]
+})
 
 // End of practice page
 const endPracticeScreen = new lab.html.Screen({
@@ -588,6 +457,76 @@ const endPracticeScreen = new lab.html.Screen({
   }
 })
 
+// Define sequence for one trial for calibration
+var trialCalibrationTemplate = new lab.flow.Sequence({
+  // title: 'StroopCalibrationTrial',
+  content: [
+    // Trial screen 
+    // The display the first screen participants respond to.
+    new lab.html.Screen({
+      // This screen is assigned a title,
+      // so that we can recognize it more easily
+      // in the dataset.
+      title: 'StroopCalibrationScreen',
+      // Again, we use the trial page template
+      content: testTrialContent,
+      parameters: {
+        // Color and displayed word
+        // are determined by the trial
+        weight: 'bold'
+      },
+      // The display terminates after 250ms
+      timeout: 250,
+      datacommit: false
+    }),
+    // Fixation cross 
+    // Participants can still respond during the fixation cross
+    new lab.html.Screen({
+      title: 'stroopCalibrationFixation',
+      content: testTrialContent,
+      parameters: {
+        color: 'gray',
+        word: '+',
+        weight: 'normal',
+      },
+      // Display the fixation cross depends on the participants own deadline
+      timeout: 1000,
+      datacommit: false
+    })
+  ],
+  tardy: true,
+  // Because we want to wait until the timeout with proceeding we need to set the responses by hand
+  messageHandlers: {
+    'before:prepare': function () {
+      // Each possible color response is associated with a key
+      const responses = {
+        'x': 'red',
+        'c': 'green',
+        'n': 'blue',
+        'm': 'yellow',
+      }
+
+      // Set response if key is pressed
+      let response = false
+      this.options.events['keypress'] = function (e) {
+        if (!response) {
+          response = true
+          if (Object.keys(responses).includes(e.key)) {
+            this.data.response = e.key
+            this.data.reaction_time = e.timeStamp - this.internals.timestamps.show
+            // Set the correct response
+            this.data.correct = this.aggregateParameters.correctResponse === e.key
+          }
+        }
+      }
+      // Save congruency of the trial
+      this.data.congruency = this.aggregateParameters.congruency
+      // Set title based on loop
+      this.options.title = `${this.aggregateParameters.blockId}_StroopCalibrationTrial`
+    }
+  }
+})
+
 // End of calibration page
 const endCalibrationScreen = new lab.html.Screen({
   content: `
@@ -595,6 +534,100 @@ const endCalibrationScreen = new lab.html.Screen({
   <h2>Kalibráció vége</h2>
   <p>
     Továbbra is tartsd az ujjaid a megfelelő gombokon és nyomj meg egy billentyűt a kísérleti szakasz megkezdéséhez!
+  </p>
+  ${keyResponseMapping}
+  </div>
+  `,
+  responses: {
+    'keypress(x)': 'red',
+    'keypress(c)': 'green',
+    'keypress(n)': 'blue',
+    'keypress(m)': 'yellow',
+  }
+})
+
+
+// Define sequence for one trial for test
+var trialTestTemplate = new lab.flow.Sequence({
+  content: [
+    // Trial screen
+    // The display the first screen participants respond to.
+    new lab.html.Screen({
+      // This screen is assigned a title,
+      // so that we can recognize it more easily
+      // in the dataset.
+      title: 'StroopTestScreen',
+      // Again, we use the trial page template
+      content: testTrialContent,
+      parameters: {
+        // Color and displayed word
+        // are determined by the trial
+        weight: 'bold'
+      },
+      // The display terminates after 250ms
+      timeout: 250,
+      datacommit: false
+    }),
+    // Fixation cross
+    // Participants can still respond during the fixation cross
+    new lab.html.Screen({
+      title: 'stroopTestFixation',
+      content: testTrialContent,
+      parameters: {
+        color: 'gray',
+        word: '+',
+        weight: 'normal',
+      },
+      datacommit: false,
+      messageHandlers: {
+        'before:prepare': function () {
+          // Set timeout
+          this.options.timeout = this.aggregateParameters.personalDeadline
+          console.log(this.options.timeout)
+        }
+      }
+    })
+  ],
+  // Because we want to wait until the timeout with proceeding we need to set the responses by hand
+  messageHandlers: {
+    'before:prepare': function () {
+      // Each possible color response is associated with a key
+      const responses = {
+        'x': 'red',
+        'c': 'green',
+        'n': 'blue',
+        'm': 'yellow',
+      }
+
+      // Set response if key is pressed
+      let response = false
+      this.options.events['keypress'] = function (e) {
+        if (!response) {
+          response = true
+          if (Object.keys(responses).includes(e.key)) {
+            this.data.response = e.key
+            this.data.reaction_time = e.timeStamp - this.internals.timestamps.show
+            // Set the correct response
+            this.data.correct = this.aggregateParameters.correctResponse === e.key
+          }
+        }
+      }
+      // Save congruency of the trial
+      this.data.congruency = this.aggregateParameters.congruency
+      // Set title based on loop
+      this.options.title = `${this.aggregateParameters.blockId}_StroopTestTrial`
+    }
+  }
+})
+
+// Between block page
+const betweenBlockScreen = new lab.html.Screen({
+  content: `
+  <div class='betweenblock'>
+  <h2>Ez a szakasz véget ért.</2>
+  <p>
+    A következő előtt tarthatsz egy rövid szünetet.
+    A folytatáshoz helyezd az ujjaid a megfelelő gombokra és nyomj meg egy billentyűt!
   </p>
   ${keyResponseMapping}
   </div>
@@ -623,10 +656,58 @@ const endScreen = new lab.html.Screen({
   `,
   // Respond to clicks on the download button
   events: {
-    'click button#download': function() {
+    'click button#download': function () {
       this.options.datastore.download()
     }
   }
+})
+
+const blockLoop = new lab.flow.Sequence({
+  title: 'blockLoop',
+  content: [
+    // Calibration
+    new lab.flow.Loop({
+      template: trialCalibrationTemplate,
+      shuffle: false,
+      messageHandlers: {
+        'before:prepare': function () {
+          this.options.templateParameters = this.parameters.calibrationTrialset
+        },
+        'after:end': function () {
+          // Get loop responses
+          const loopResponses = this.options.datastore.data
+          // Get only correct trials and calibration trials
+          const loopResponsesFiltered = loopResponses.filter(
+            row => row.sender == `${this.parameters.blockId}_StroopCalibrationTrial` && row.correct
+          )
+          // Calulate the average reaction time
+          var personalDeadline = Math.floor(average(
+            loopResponsesFiltered.map(row => row.reaction_time)
+          ))
+
+          this.parent.parameters.personalDeadline = personalDeadline
+        }
+      }
+    }),
+    // End of calibration
+    endCalibrationScreen,
+    // Countdown
+    countdownPage(3),
+    // Test trials
+    new lab.flow.Loop({
+      template: trialTestTemplate,
+      shuffle: false,
+      tardy: true,
+      messageHandlers: {
+        'before:prepare': function () {
+          this.options.templateParameters = this.parameters.testTrialset.map(e => ({ ...e, personalDeadline: this.parent.parameters.personalDeadline }))
+          console.log(this.options.templateParameters)
+        }
+      }
+    }),
+    // End block screen
+    betweenBlockScreen
+  ]
 })
 
 // Put together the study
@@ -635,48 +716,31 @@ const study = new lab.flow.Sequence({
     // Inform screen
     informScreen,
     // Consent screen
-    // consentScreen,
+    consentScreen,
     // Instructions
-    // instructionsScreen,
+    instructionsScreen,
     // Countdown
-    // countdownPage(3),
+    countdownPage(3),
     // Practice trials
-    // new lab.flow.Loop({
-    //   template: trialPracticeTemplate,
-    //   templateParameters: trials,
-    //   shuffle: false
-    //   }),
-    // End of practice trials
-    // endPracticeScreen,
-    // Countdown
-    // countdownPage(3),
-    // Calibration
     new lab.flow.Loop({
-      template: trialCalibrationTemplate,
-      templateParameters: calibrationLoopData,
+      template: trialPracticeTemplate,
+      templateParameters: practiceLoopData,
       shuffle: false
     }),
-    // End of calibration
-    // endCalibrationScreen,
+    // End of practice trials
+    endPracticeScreen,
     // Countdown
-    // countdownPage(3),
-    // Test trials
-    // new lab.flow.Loop({
-    //   template: trialTestTemplate,
-    //   templateParameters: trials,
-    //   shuffle: false
-    //   }),
+    countdownPage(3),
+    // Test block loop
+    new lab.flow.Loop({
+      template: blockLoop,
+      templateParameters: testLoopData,
+      shuffle: false
+    }),
     // End screen
     endScreen
   ],
   datastore: new lab.data.Store()
-  // events: {
-  //   'visibilitychange': function(event) {
-  //     if (document.hidden) {
-  //       alert(`Kérlek, ne válts ablakot amíg tart a kísérlet!`)
-  //     }
-  //   }
-  // }
 })
 
 // Start the study

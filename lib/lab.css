@@ -2,8 +2,19 @@
   display: none;
 }
 
+.betweenblock p {
+  font-weight: normal !important;
+}
+
+.dot {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
 table, th, td {
-  border:none;
+  border: none;
 }
 
 /* Basic configuration */
