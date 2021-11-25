@@ -141,7 +141,7 @@ function getRandomCalbirationTrials(numberOfTrials) {
 }
 
 // For practice trials
-const practiceLoopData = getRandomTrials(24)
+const practiceLoopData = getRandomTrials(8, false)
 
 // Create screens ----------------------------------------------------------
 // Create inform screen
