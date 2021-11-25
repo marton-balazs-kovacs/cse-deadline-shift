@@ -142,7 +142,7 @@ function getRandomCalbirationTrials(numberOfTrials) {
 
 // For practice trials
 const practiceLoopData = getRandomTrials(8, false)
-
+console.log(practiceLoopData)
 // Create screens ----------------------------------------------------------
 // Create inform screen
 const informScreen = new lab.html.Screen({
@@ -274,32 +274,28 @@ const instructionsScreen = new lab.html.Screen({
   </p>
   <br>
   <div style="display: inline-block;">
-    <p style="color:red;">PIROS</p>
-    <p style="color: yellow;">KÉK</p>
+    <h1 style="color:red;">PIROS</h1>
+    <h1 style="color: yellow;">KÉK</h1>
   </div>
   <p>
     A feladatod az lesz, hogy meghatározd, milyen színnel van a szó nyomtatva, 
-    miközben a szó jelentését figyelmen kívül hagyod. Például a fenti 2 példára a 
-    helyes válaszok a sárga és a piros. Mindegyik szín négy válaszbillentyű 
-    (x; c; n; m) valamelyikéhez lesz hozzárendelve. Kérünk, hogy a x, c, n és m 
-    billentyűket a bal középső ujjaddal, a bal mutató ujjaddal, a jobb mutató 
-    ujjaddal és a jobb középső ujjaddal nyomd le! Azt, hogy melyik szín melyik 
-    válaszbillentyűhöz tartozik, később a gyakorló rész alatt lesz alkalmad 
-    megtanulni. Kérünk, olyan gyorsan válaszolj, amennyire ez lehetséges hibázás 
-    nélkül.
+    miközben a szó jelentését figyelmen kívül hagyod. Például a fenti 2 példára
+    a helyes válaszok a piros és a sárga. Mindegyik szín négy válaszbillentyű (x; c; n; m)
+    valamelyikéhez lesz hozzárendelve. Azt, hogy melyik szín melyik válaszbillentyűhöz tartozik,
+    később, a gyakorló rész alatt lesz alkalmad megtanulni. Kérünk, olyan gyorsan válaszolj,
+    amennyire ez lehetséges hibázás nélkül!
   </p>
   <p>
     Az egész kísérlet 4 részre van felosztva, amelyből mindegyik 6 percet 
     tesz ki (24 perc összesen). A részek között rövid szünetet is tarthatsz.
   </p>
   <p>
-    Nagyon fontos, hogy a kísérlet során végig tudj összpontosítani! Kérünk, hogy 
-    ne csinálj semmi mást, miközben a feladatot csinálod! Kérünk, vedd figyelembe, 
-    hogy ha a megoldásod pontossága 70%-nál alacsonyabb lesz, ami egy ésszerű határ 
-    az előző kutatások fényében, akkor nem kapsz pontot a kitöltésért. 
-    Ha 70% feletti pontossággal oldod meg a feladatot, akkor 0,5 pontot kapsz 
-    a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel” 
-    nevű kurzuson.
+    Kérünk, hogy a feladatot számítógépen végezd el (ne telefonon, tableten stb.)! Nagyon fontos,
+    hogy a kísérlet során végig tudj összpontosítani, ezért kérünk, hogy ne csinálj semmi mást,
+    miközben a feladatot csinálod! Vedd figyelembe, hogy ha a megoldásod pontossága 70%-nál alacsonyabb
+    lesz, ami egy ésszerű határ az előző kutatások fényében, akkor nem kapsz pontot a kitöltésért.
+    Ha 70% feletti pontossággal oldod meg a feladatot, valamint, ha elvégzed a feladat másik verzióját is,
+    akkor 1 pontot kapsz a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel” nevű kurzuson.
   </p>
   Nyomd meg a space billentyűt a folytatáshoz!
   </div>
@@ -340,6 +336,28 @@ const keyResponseMapping = `
 </table>
 `
 
+// Start of practice page
+const startPracticeScreen = new lab.html.Screen({
+  title: 'startPracticeScreen',
+  content: `
+  <div>
+  <h2>Gyakorlás</2>
+  <p>
+    Az alábbi táblázatban láthatod, hogy melyik színhez melyik gomb tartozik, 
+    illetve, hogy melyik gombot melyik ujjaddal kell megnyomnod. Helyezd az 
+    ujjaid a megfelelő gombokra és nyomj meg egy billentyűt!
+  </p>
+  ${keyResponseMapping}
+  </div>
+  `,
+  responses: {
+    'keypress(x)': 'x',
+    'keypress(c)': 'c',
+    'keypress(n)': 'n',
+    'keypress(m)': 'm'
+  }
+})
+
 // Define a template for a test stroop trial
 var testTrialContent = ' \
 <div style="font-size: 36px; font-weight: ${ parameters.weight }; color: ${ parameters.color }"> \
@@ -360,6 +378,7 @@ ${ parameters.word } \
 
 // Define sequence for one trial for practice
 var trialPracticeTemplate = new lab.flow.Sequence({
+  datacommit:false,
   content: [
     new lab.flow.Sequence({
       title: 'StroopPracticeTrial',
@@ -394,15 +413,15 @@ var trialPracticeTemplate = new lab.flow.Sequence({
         })
       ],
       responses: {
-        'keypress(x)': 'red',
-        'keypress(c)': 'green',
-        'keypress(n)': 'blue',
-        'keypress(m)': 'yellow',
+        'keypress(x)': 'x',
+        'keypress(c)': 'c',
+        'keypress(n)': 'n',
+        'keypress(m)': 'm'
       },
       messageHandlers: {
         'before:prepare': function () {
           // Set the correct response
-          this.options.correctResponse = this.aggregateParameters.color
+          this.options.correctResponse = this.aggregateParameters.correctResponse
           // Save congruency of the trial
           this.data.congruency = this.aggregateParameters.congruency
         }
@@ -439,27 +458,27 @@ var trialPracticeTemplate = new lab.flow.Sequence({
 
 // End of practice page
 const endPracticeScreen = new lab.html.Screen({
+  title: 'endPracticeScreen',
   content: `
   <div>
   <h2>Gyakorlás vége</h2>
   <p>
-    Most következik a négy kísérleti szakasz, melyeket egy-egy kalibrációs szakasz előz meg.
-    Tartsd az ujjaid a megfelelő gombokon és nyomj meg egy billentyűt a kalibráció megkezdéséhez!
+    Most következik a négy kísérleti szakasz, melyeket egy-egy kalibrációs
+    szakasz előz meg. Ezek során már nem lesz a képernyőn, hogy melyik színhez
+    melyik gomb tartozik, valamint nem fogsz visszajelzést kapni arról, hogy
+    helyesen válaszoltál-e. Tartsd az ujjaid a megfelelő gombokon és nyomd 
+    meg a space billentyűt a kalibráció megkezdéséhez!
   </p>
   ${keyResponseMapping}
   </div>
   `,
   responses: {
-    'keypress(x)': 'red',
-    'keypress(c)': 'green',
-    'keypress(n)': 'blue',
-    'keypress(m)': 'yellow',
+    'keypress(Space)': 'continue'
   }
 })
 
 // Define sequence for one trial for calibration
 var trialCalibrationTemplate = new lab.flow.Sequence({
-  // title: 'StroopCalibrationTrial',
   content: [
     // Trial screen 
     // The display the first screen participants respond to.
@@ -489,36 +508,21 @@ var trialCalibrationTemplate = new lab.flow.Sequence({
         word: '+',
         weight: 'normal',
       },
-      // Display the fixation cross depends on the participants own deadline
-      timeout: 1000,
       datacommit: false
     })
   ],
+  responses: {
+    'keypress(x)': 'x',
+    'keypress(c)': 'c',
+    'keypress(n)': 'n',
+    'keypress(m)': 'm'
+  },
   tardy: true,
   // Because we want to wait until the timeout with proceeding we need to set the responses by hand
   messageHandlers: {
     'before:prepare': function () {
-      // Each possible color response is associated with a key
-      const responses = {
-        'x': 'red',
-        'c': 'green',
-        'n': 'blue',
-        'm': 'yellow',
-      }
-
-      // Set response if key is pressed
-      let response = false
-      this.options.events['keypress'] = function (e) {
-        if (!response) {
-          response = true
-          if (Object.keys(responses).includes(e.key)) {
-            this.data.response = e.key
-            this.data.reaction_time = e.timeStamp - this.internals.timestamps.show
-            // Set the correct response
-            this.data.correct = this.aggregateParameters.correctResponse === e.key
-          }
-        }
-      }
+      // Set the correct response
+      this.options.correctResponse = this.aggregateParameters.correctResponse
       // Save congruency of the trial
       this.data.congruency = this.aggregateParameters.congruency
       // Set title based on loop
@@ -529,20 +533,23 @@ var trialCalibrationTemplate = new lab.flow.Sequence({
 
 // End of calibration page
 const endCalibrationScreen = new lab.html.Screen({
+  title: 'endCalibrationScreen',
   content: `
   <div>
   <h2>Kalibráció vége</h2>
   <p>
     Továbbra is tartsd az ujjaid a megfelelő gombokon és nyomj meg egy billentyűt a kísérleti szakasz megkezdéséhez!
+    A kísérleti szakaszban limitált időd lesz reagálni, ezért talán gyorsabbnak fog tűnni a feladat.
+    Igyekezz mindig a következő szó megjelenése előtt reagálni és ügyelj arra, hogy helyesen válaszolj!
   </p>
   ${keyResponseMapping}
   </div>
   `,
   responses: {
-    'keypress(x)': 'red',
-    'keypress(c)': 'green',
-    'keypress(n)': 'blue',
-    'keypress(m)': 'yellow',
+    'keypress(x)': 'x',
+    'keypress(c)': 'c',
+    'keypress(n)': 'n',
+    'keypress(m)': 'n'
   }
 })
 
@@ -622,6 +629,7 @@ var trialTestTemplate = new lab.flow.Sequence({
 
 // Between block page
 const betweenBlockScreen = new lab.html.Screen({
+  title: 'betweenBlockScreen',
   content: `
   <div class='betweenblock'>
   <h2>Ez a szakasz véget ért.</2>
@@ -633,22 +641,23 @@ const betweenBlockScreen = new lab.html.Screen({
   </div>
   `,
   responses: {
-    'keypress(x)': 'red',
-    'keypress(c)': 'green',
-    'keypress(n)': 'blue',
-    'keypress(m)': 'yellow',
+    'keypress(x)': 'x',
+    'keypress(c)': 'c',
+    'keypress(n)': 'n',
+    'keypress(m)': 'm'
   }
 })
 
 // End of experiment page
 const endScreen = new lab.html.Screen({
+  title: 'endScreen',
   content: `
   <div>
   <h1>Kész</h1>
   <p>
     A kísérlet véget ért, 80%-os pontossággal teljesítetted a tesztet. Köszönjük a részvételt!
   </p>
-  <button id="download">Download your raw data</button>
+  <button id="download">Töltsd le az adataid!</button>
   <p>
     Ha bármi kérdésed vagy megjegyzésed van, kérlek, vedd fel a kapcsolatot Székely Zsuzsával, a kutatás vezetőjével ezen az email címen: szekely.zsuzsa.mail@gmail.com!
   </p>
@@ -665,6 +674,8 @@ const endScreen = new lab.html.Screen({
 const blockLoop = new lab.flow.Sequence({
   title: 'blockLoop',
   content: [
+    // Countdown
+    countdownPage(3),
     // Calibration
     new lab.flow.Loop({
       template: trialCalibrationTemplate,
@@ -682,7 +693,7 @@ const blockLoop = new lab.flow.Sequence({
           )
           // Calulate the average reaction time
           var personalDeadline = Math.floor(average(
-            loopResponsesFiltered.map(row => row.reaction_time)
+            loopResponsesFiltered.map(row => row.duration)
           ))
 
           this.parent.parameters.personalDeadline = personalDeadline
@@ -719,6 +730,8 @@ const study = new lab.flow.Sequence({
     consentScreen,
     // Instructions
     instructionsScreen,
+    // Start of practice trials
+    startPracticeScreen,
     // Countdown
     countdownPage(3),
     // Practice trials
@@ -729,8 +742,6 @@ const study = new lab.flow.Sequence({
     }),
     // End of practice trials
     endPracticeScreen,
-    // Countdown
-    countdownPage(3),
     // Test block loop
     new lab.flow.Loop({
       template: blockLoop,
