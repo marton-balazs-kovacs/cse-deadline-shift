@@ -654,6 +654,12 @@ const betweenBlockScreen = new lab.html.Screen({
   `,
   responses: {
     'keypress(Space)': 'continue'
+  },
+  tardy: true,
+  messageHandlers: {
+    "before:prepare": function() {
+      this.options.skip = (this.aggregateParameters.blockId === "4")? true : false
+    }
   }
 })
 
