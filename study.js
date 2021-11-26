@@ -1,4 +1,21 @@
 // Utils ----------------------------------------------------------
+// Detect browser
+function detectBrowser() { 
+  if((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1 ) {
+      return 'Opera';
+  } else if(navigator.userAgent.indexOf("Chrome") != -1 ) {
+      return 'Chrome';
+  } else if(navigator.userAgent.indexOf("Safari") != -1) {
+      return 'Safari';
+  } else if(navigator.userAgent.indexOf("Firefox") != -1 ){
+      return 'Firefox';
+  } else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) {
+      return 'IE';//crap
+  } else {
+      return 'Unknown';
+  }
+} 
+
 // Calculate range
 function range(stop) {
   var result = [];
@@ -50,7 +67,7 @@ const countdownPage = function (countdown) {
 // Create pseudo-random trial orders ----------------------------------------------------------
 // For the test trials
 var redBlock = [[["ZÖLD", "green", "con", "c"], ["PIROS", "red", "con", "x"]], [["PIROS", "green", "inc", "c"], ["ZÖLD", "red", "inc", "x"]]]
-var blueBlock = [[["KÉK", "blue", "con", "n"], ["SÁRGA", "yellow", "con", "m"]], [["KÉK", "yellow", "inc", "n"], ["SÁRGA", "blue", "inc", "m"]]]
+var blueBlock = [[["KÉK", "blue", "con", "n"], ["SÁRGA", "yellow", "con", "m"]], [["KÉK", "yellow", "inc", "m"], ["SÁRGA", "blue", "inc", "n"]]]
 
 function getRandomTrials(numberOfTrials, addFirstTrial) {
   var repetition = numberOfTrials / 8
@@ -142,7 +159,7 @@ function getRandomCalbirationTrials(numberOfTrials) {
 
 // For practice trials
 const practiceLoopData = getRandomTrials(8, false)
-console.log(practiceLoopData)
+
 // Create screens ----------------------------------------------------------
 // Create inform screen
 const informScreen = new lab.html.Screen({
@@ -297,7 +314,7 @@ const instructionsScreen = new lab.html.Screen({
     Ha 70% feletti pontossággal oldod meg a feladatot, valamint, ha elvégzed a feladat másik verzióját is,
     akkor 1 pontot kapsz a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel” nevű kurzuson.
   </p>
-  Nyomd meg a space billentyűt a folytatáshoz!
+  Nyomd meg a Space billentyűt a folytatáshoz!
   </div>
   `,
   responses: {
@@ -345,16 +362,13 @@ const startPracticeScreen = new lab.html.Screen({
   <p>
     Az alábbi táblázatban láthatod, hogy melyik színhez melyik gomb tartozik, 
     illetve, hogy melyik gombot melyik ujjaddal kell megnyomnod. Helyezd az 
-    ujjaid a megfelelő gombokra és nyomj meg egy billentyűt!
+    ujjaid a megfelelő gombokra és nyomd meg a Space billentyűt!
   </p>
   ${keyResponseMapping}
   </div>
   `,
   responses: {
-    'keypress(x)': 'x',
-    'keypress(c)': 'c',
-    'keypress(n)': 'n',
-    'keypress(m)': 'm'
+    'keypress(Space)': 'continue'
   }
 })
 
@@ -467,7 +481,7 @@ const endPracticeScreen = new lab.html.Screen({
     szakasz előz meg. Ezek során már nem lesz a képernyőn, hogy melyik színhez
     melyik gomb tartozik, valamint nem fogsz visszajelzést kapni arról, hogy
     helyesen válaszoltál-e. Tartsd az ujjaid a megfelelő gombokon és nyomd 
-    meg a space billentyűt a kalibráció megkezdéséhez!
+    meg a Space billentyűt a kalibráció megkezdéséhez!
   </p>
   ${keyResponseMapping}
   </div>
@@ -517,7 +531,7 @@ var trialCalibrationTemplate = new lab.flow.Sequence({
     'keypress(n)': 'n',
     'keypress(m)': 'm'
   },
-  tardy: true,
+  // tardy: true,
   // Because we want to wait until the timeout with proceeding we need to set the responses by hand
   messageHandlers: {
     'before:prepare': function () {
@@ -538,7 +552,7 @@ const endCalibrationScreen = new lab.html.Screen({
   <div>
   <h2>Kalibráció vége</h2>
   <p>
-    Továbbra is tartsd az ujjaid a megfelelő gombokon és nyomj meg egy billentyűt a kísérleti szakasz megkezdéséhez!
+    Továbbra is tartsd az ujjaid a megfelelő gombokon és nyomd meg a Space billentyűt a kísérleti szakasz megkezdéséhez!
     A kísérleti szakaszban limitált időd lesz reagálni, ezért talán gyorsabbnak fog tűnni a feladat.
     Igyekezz mindig a következő szó megjelenése előtt reagálni és ügyelj arra, hogy helyesen válaszolj!
   </p>
@@ -546,10 +560,7 @@ const endCalibrationScreen = new lab.html.Screen({
   </div>
   `,
   responses: {
-    'keypress(x)': 'x',
-    'keypress(c)': 'c',
-    'keypress(n)': 'n',
-    'keypress(m)': 'n'
+    'keypress(Space)': 'continue'
   }
 })
 
@@ -590,7 +601,7 @@ var trialTestTemplate = new lab.flow.Sequence({
         'before:prepare': function () {
           // Set timeout
           this.options.timeout = this.aggregateParameters.personalDeadline
-          console.log(this.options.timeout)
+          // this.options.timeout = 5000
         }
       }
     })
@@ -613,6 +624,7 @@ var trialTestTemplate = new lab.flow.Sequence({
           response = true
           if (Object.keys(responses).includes(e.key)) {
             this.data.response = e.key
+            this.data.keypress_time = e.timeStamp
             this.data.reaction_time = e.timeStamp - this.internals.timestamps.show
             // Set the correct response
             this.data.correct = this.aggregateParameters.correctResponse === e.key
@@ -635,16 +647,13 @@ const betweenBlockScreen = new lab.html.Screen({
   <h2>Ez a szakasz véget ért.</2>
   <p>
     A következő előtt tarthatsz egy rövid szünetet.
-    A folytatáshoz helyezd az ujjaid a megfelelő gombokra és nyomj meg egy billentyűt!
+    A folytatáshoz helyezd az ujjaid a megfelelő gombokra és nyomd meg a Space billentyűt!
   </p>
   ${keyResponseMapping}
   </div>
   `,
   responses: {
-    'keypress(x)': 'x',
-    'keypress(c)': 'c',
-    'keypress(n)': 'n',
-    'keypress(m)': 'm'
+    'keypress(Space)': 'continue'
   }
 })
 
@@ -680,6 +689,7 @@ const blockLoop = new lab.flow.Sequence({
     new lab.flow.Loop({
       template: trialCalibrationTemplate,
       shuffle: false,
+      // tardy: true,
       messageHandlers: {
         'before:prepare': function () {
           this.options.templateParameters = this.parameters.calibrationTrialset
@@ -712,7 +722,6 @@ const blockLoop = new lab.flow.Sequence({
       messageHandlers: {
         'before:prepare': function () {
           this.options.templateParameters = this.parameters.testTrialset.map(e => ({ ...e, personalDeadline: this.parent.parameters.personalDeadline }))
-          console.log(this.options.templateParameters)
         }
       }
     }),
@@ -751,6 +760,11 @@ const study = new lab.flow.Sequence({
     // End screen
     endScreen
   ],
+  messageHandlers: {
+    "before:prepare": function () {
+      this.data.browser_type = detectBrowser()
+    }
+  },
   datastore: new lab.data.Store()
 })
 
