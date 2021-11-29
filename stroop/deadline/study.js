@@ -392,10 +392,26 @@ ${ parameters.word } \
 
 // Define sequence for one trial for practice
 var trialPracticeTemplate = new lab.flow.Sequence({
-  datacommit:false,
+  title: 'StroopPractice',
+  datacommit: false,
   content: [
+    // Fixation cross
+    // Participants cannot respond during the cross
+    new lab.html.Screen({
+      title: 'stroopPracticeFixation',
+      content: practiceTrialContent,
+      parameters: {
+        color: 'gray',
+        word: '+',
+        weight: 'normal',
+      },
+      // Don't log data from this screen
+      datacommit: false,
+      // Display the fixation cross 1000ms ITI
+      timeout: 1000
+    }),
     new lab.flow.Sequence({
-      title: 'StroopPracticeTrial',
+      title: 'StroopPracticetrial',
       content: [
         // Trial screen
         // The display the first screen participants respond to.
@@ -411,19 +427,17 @@ var trialPracticeTemplate = new lab.flow.Sequence({
           // The display terminates after 250ms
           timeout: 250
         }),
-        // Fixation cross
-        // Participants can still respond during the fixation cross
+        // Blank screen
+        // Participants can still respond during the blank screen
         new lab.html.Screen({
-          title: 'stroopPracticeFixation',
+          title: 'stroopPracticeBlank',
           content: practiceTrialContent,
           parameters: {
-            color: 'gray',
-            word: '+',
-            weight: 'normal',
+            word: ''
           },
           // Don't log data from this screen
           datacommit: false
-          // Display the fixation cross limitless because of practice
+          // Display the blank screen is limitless because of practice
         })
       ],
       responses: {
@@ -493,25 +507,9 @@ const endPracticeScreen = new lab.html.Screen({
 
 // Define sequence for one trial for calibration
 var trialCalibrationTemplate = new lab.flow.Sequence({
+  title: 'StroopCalibration',
+  datacommit: false,
   content: [
-    // Trial screen 
-    // The display the first screen participants respond to.
-    new lab.html.Screen({
-      // This screen is assigned a title,
-      // so that we can recognize it more easily
-      // in the dataset.
-      title: 'StroopCalibrationScreen',
-      // Again, we use the trial page template
-      content: testTrialContent,
-      parameters: {
-        // Color and displayed word
-        // are determined by the trial
-        weight: 'bold'
-      },
-      // The display terminates after 250ms
-      timeout: 250,
-      datacommit: false
-    }),
     // Fixation cross 
     // Participants can still respond during the fixation cross
     new lab.html.Screen({
@@ -522,27 +520,62 @@ var trialCalibrationTemplate = new lab.flow.Sequence({
         word: '+',
         weight: 'normal',
       },
-      datacommit: false
+      datacommit: false,
+      timeout: 1000
+    }),
+    new lab.flow.Sequence({
+      content: [
+        // Trial screen 
+        // The display the first screen participants respond to.
+        new lab.html.Screen({
+          // This screen is assigned a title,
+          // so that we can recognize it more easily
+          // in the dataset.
+          title: 'StroopCalibrationScreen',
+          // Again, we use the trial page template
+          content: testTrialContent,
+          parameters: {
+            // Color and displayed word
+            // are determined by the trial
+            weight: 'bold'
+          },
+          // The display terminates after 250ms
+          timeout: 250,
+          datacommit: false
+        }),
+        // Blank screen
+        // Participants can still respond during the blank screen
+        new lab.html.Screen({
+          title: 'stroopCalibrationBlank',
+          content: testTrialContent,
+          parameters: {
+            word: ''
+          },
+          // Don't log data from this screen
+          datacommit: false
+          // Display the blank screen is limitless because of calibration
+        })
+      ],
+      responses: {
+        'keypress(x)': 'x',
+        'keypress(c)': 'c',
+        'keypress(n)': 'n',
+        'keypress(m)': 'm'
+      },
+      // tardy: true,
+      // Because we want to wait until the timeout with proceeding we need to set the responses by hand
+      messageHandlers: {
+        'before:prepare': function () {
+          // Set the correct response
+          this.options.correctResponse = this.aggregateParameters.correctResponse
+          // Save congruency of the trial
+          this.data.congruency = this.aggregateParameters.congruency
+          // Set title based on loop
+          this.options.title = `${this.aggregateParameters.blockId}_StroopCalibrationTrial`
+        }
+      }
     })
-  ],
-  responses: {
-    'keypress(x)': 'x',
-    'keypress(c)': 'c',
-    'keypress(n)': 'n',
-    'keypress(m)': 'm'
-  },
-  // tardy: true,
-  // Because we want to wait until the timeout with proceeding we need to set the responses by hand
-  messageHandlers: {
-    'before:prepare': function () {
-      // Set the correct response
-      this.options.correctResponse = this.aggregateParameters.correctResponse
-      // Save congruency of the trial
-      this.data.congruency = this.aggregateParameters.congruency
-      // Set title based on loop
-      this.options.title = `${this.aggregateParameters.blockId}_StroopCalibrationTrial`
-    }
-  }
+  ]
 })
 
 // End of calibration page
@@ -567,25 +600,9 @@ const endCalibrationScreen = new lab.html.Screen({
 
 // Define sequence for one trial for test
 var trialTestTemplate = new lab.flow.Sequence({
+  title: 'stroopTest',
+  datacommit: false,
   content: [
-    // Trial screen
-    // The display the first screen participants respond to.
-    new lab.html.Screen({
-      // This screen is assigned a title,
-      // so that we can recognize it more easily
-      // in the dataset.
-      title: 'StroopTestScreen',
-      // Again, we use the trial page template
-      content: testTrialContent,
-      parameters: {
-        // Color and displayed word
-        // are determined by the trial
-        weight: 'bold'
-      },
-      // The display terminates after 250ms
-      timeout: 250,
-      datacommit: false
-    }),
     // Fixation cross
     // Participants can still respond during the fixation cross
     new lab.html.Screen({
@@ -597,46 +614,80 @@ var trialTestTemplate = new lab.flow.Sequence({
         weight: 'normal',
       },
       datacommit: false,
+      timeout: 1000
+    }),
+    new lab.flow.Sequence({
+      content: [
+        // Trial screen
+        // The display the first screen participants respond to.
+        new lab.html.Screen({
+          // This screen is assigned a title,
+          // so that we can recognize it more easily
+          // in the dataset.
+          title: 'StroopTestScreen',
+          // Again, we use the trial page template
+          content: testTrialContent,
+          parameters: {
+            // Color and displayed word
+            // are determined by the trial
+            weight: 'bold'
+          },
+          // The display terminates after 250ms
+          timeout: 250,
+          datacommit: false
+        }),
+        // Blank screen
+        // Participants can still respond during the blank screen
+        new lab.html.Screen({
+          title: 'stroopTestBlank',
+          content: testTrialContent,
+          parameters: {
+            word: ''
+          },
+          // Don't log data from this screen
+          datacommit: false,
+          messageHandlers: {
+            'before:prepare': function () {
+              // Set timeout
+              this.options.timeout = this.aggregateParameters.personalDeadline
+              // this.options.timeout = 5000
+            }
+          }
+        })
+      ],
+      // Because we want to wait until the timeout with proceeding we need to set the responses by hand
       messageHandlers: {
         'before:prepare': function () {
-          // Set timeout
-          this.options.timeout = this.aggregateParameters.personalDeadline
-          // this.options.timeout = 5000
+          // Each possible color response is associated with a key
+          const responses = {
+            'x': 'red',
+            'c': 'green',
+            'n': 'blue',
+            'm': 'yellow',
+          }
+
+          // Set response if key is pressed
+          let response = false
+          this.options.events['keypress'] = function (e) {
+            if (!response) {
+              response = true
+              if (Object.keys(responses).includes(e.key)) {
+                this.data.response = e.key
+                this.data.keypress_time = e.timeStamp
+                this.data.reaction_time = e.timeStamp - this.internals.timestamps.show
+                // Set the correct response
+                this.data.correct = this.aggregateParameters.correctResponse === e.key
+              }
+            }
+          }
+          // Save congruency of the trial
+          this.data.congruency = this.aggregateParameters.congruency
+          // Set title based on loop
+          this.options.title = `${this.aggregateParameters.blockId}_StroopTestTrial`
         }
       }
     })
-  ],
-  // Because we want to wait until the timeout with proceeding we need to set the responses by hand
-  messageHandlers: {
-    'before:prepare': function () {
-      // Each possible color response is associated with a key
-      const responses = {
-        'x': 'red',
-        'c': 'green',
-        'n': 'blue',
-        'm': 'yellow',
-      }
-
-      // Set response if key is pressed
-      let response = false
-      this.options.events['keypress'] = function (e) {
-        if (!response) {
-          response = true
-          if (Object.keys(responses).includes(e.key)) {
-            this.data.response = e.key
-            this.data.keypress_time = e.timeStamp
-            this.data.reaction_time = e.timeStamp - this.internals.timestamps.show
-            // Set the correct response
-            this.data.correct = this.aggregateParameters.correctResponse === e.key
-          }
-        }
-      }
-      // Save congruency of the trial
-      this.data.congruency = this.aggregateParameters.congruency
-      // Set title based on loop
-      this.options.title = `${this.aggregateParameters.blockId}_StroopTestTrial`
-    }
-  }
+  ]
 })
 
 // Between block page
