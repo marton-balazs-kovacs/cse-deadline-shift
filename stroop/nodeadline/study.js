@@ -156,7 +156,7 @@ const informScreen = new lab.html.Screen({
     <p>
       A kutatásban való részvétel teljesen önkéntes. A vizsgálatot bármikor
       indoklás nélkül megszakíthatod, vagy a kérdések megválaszolását megtagadhatod
-      a böngészőablak bezárásával.Ha bármilyen kérdésed, aggályod vagy panaszod van
+      a böngészőablak bezárásával. Ha bármilyen kérdésed, aggályod vagy panaszod van
       a kísérlettel kapcsolatban, kérlek, keresd Székely Zsuzsát (szekely.zsuzsa.mail@gmail.com)!
     </p>
     <h3>A „Hozzájárulás az adatkezeléshez” c. dokumentumot elolvastam és a benne foglaltakat elfogadom.</h3>
@@ -250,8 +250,8 @@ const instructionsScreen = new lab.html.Screen({
   <p>
     Ebben a kísérletben arra vagyunk kíváncsiak, hogy az emberek hogyan oldanak
     fel vizuális ingerek feldolgozása közben létrejövő konfliktusokat.
-    A kísérlet alatt színek neveit fogod látni különböző színű betűkkel kiírva,
-    ahogy a lenti példa mutatja.
+    A kísérlet alatt különböző színű betűkkel írt színek nevei fognak felvillanni a képernyőn,
+    ezekre itt láthatsz 2 példát:
   </p>
   <br>
   <div style="display: inline-block;">
@@ -259,24 +259,26 @@ const instructionsScreen = new lab.html.Screen({
     <h1 style="color: yellow;">KÉK</h1>
   </div>
   <p>
-    A feladatod az lesz, hogy meghatározd, milyen színnel van a szó nyomtatva, 
-    miközben a szó jelentését figyelmen kívül hagyod. Például a fenti 2 példára
+    A feladatod az lesz, hogy meghatározd, milyen színnel van írva a szó, 
+    miközben a szó jelentését figyelmen kívül hagyod. Tehát a fenti 2 példára
     a helyes válaszok a piros és a sárga. Mindegyik szín négy válaszbillentyű (x; c; n; m)
     valamelyikéhez lesz hozzárendelve. Azt, hogy melyik szín melyik válaszbillentyűhöz tartozik,
-    később, a gyakorló rész alatt lesz alkalmad megtanulni. Kérünk, olyan gyorsan válaszolj,
+    később, a gyakorló rész alatt lesz alkalmad megtanulni. Kérünk, hogy olyan gyorsan válaszolj,
     amennyire ez lehetséges hibázás nélkül!
   </p>
   <p>
-    Az egész kísérlet 4 részre van felosztva, amelyből mindegyik 6 percet 
-    tesz ki (24 perc összesen). A részek között rövid szünetet is tarthatsz.
+    A gyakorlást követően a kísérlet 4 szakaszból fog állni, ezek mindegyike kb. 6 percet 
+    tesz ki (24 perc összesen). A szakaszok között rövid szünetet tarthatsz.
   </p>
   <p>
-    Kérünk, hogy a feladatot számítógépen végezd el (ne telefonon, tableten stb.)! Nagyon fontos,
-    hogy a kísérlet során végig tudj összpontosítani, ezért kérünk, hogy ne csinálj semmi mást,
+    Kérünk, hogy a feladatot számítógépen végezd el (ne telefonon, tableten stb.)! A kísérlet csak Mozilla Firefox 
+    és Safari böngészőkben működik megfelelően, ezért kérünk, hogy ezek valamelyikében végezd el, egy új böngészőablakban! 
+    Nagyon fontos, hogy a kísérlet során végig tudj összpontosítani, ezért kérünk, hogy ne csinálj semmi mást,
     miközben a feladatot csinálod! Vedd figyelembe, hogy ha a megoldásod pontossága 70%-nál alacsonyabb
     lesz, ami egy ésszerű határ az előző kutatások fényében, akkor nem kapsz pontot a kitöltésért.
     Ha 70% feletti pontossággal oldod meg a feladatot, valamint, ha elvégzed a feladat másik verzióját is,
-    akkor 1 pontot kapsz a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel” nevű kurzuson.
+    akkor 1 pontot kapsz a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel” nevű kurzuson. 
+    Ehhez ne felejtsd el megadni a Neptun-kódod a kísérlet végén!
   </p>
   Nyomd meg a Space billentyűt a folytatáshoz!
   </div>
@@ -324,9 +326,11 @@ const startPracticeScreen = new lab.html.Screen({
   <div>
   <h2>Gyakorlás</2>
   <p>
-    Az alábbi táblázatban láthatod, hogy melyik színhez melyik gomb tartozik, 
-    illetve, hogy melyik gombot melyik ujjaddal kell megnyomnod. Helyezd az 
-    ujjaid a megfelelő gombokra és nyomd meg a Space billentyűt!
+    Az alábbi táblázatban láthatod, hogy melyik betűszínhez melyik gomb tartozik, 
+    illetve, hogy melyik gombot melyik ujjaddal kell megnyomnod. 
+    A feladatod tehát, hogy ezek alapján reagálj a felvillanó szavak betűszínére. 
+    Minden szó megjelenése előtt egy '+' jelet fogsz látni, ez jelzi, hogy a következő szóra kell készülnöd.
+    A gyakorlás megkezdéséhez helyezd az ujjaid a megfelelő gombokra és nyomd meg a Space billentyűt!
   </p>
   ${keyResponseMapping}
   </div>
@@ -455,11 +459,10 @@ const endPracticeScreen = new lab.html.Screen({
   <div>
   <h2>Gyakorlás vége</h2>
   <p>
-    Most következik a négy kísérleti szakasz, melyeket egy-egy kalibrációs
-    szakasz előz meg. Ezek során már nem lesz a képernyőn, hogy melyik színhez
+    Most következik a négy kísérleti szakasz. Ezek során már nem lesz a képernyőn, hogy melyik színhez
     melyik gomb tartozik, valamint nem fogsz visszajelzést kapni arról, hogy
     helyesen válaszoltál-e. Tartsd az ujjaid a megfelelő gombokon és nyomd 
-    meg a Space billentyűt a kalibráció megkezdéséhez!
+    meg a Space billentyűt az első szakasz megkezdéséhez!
   </p>
   ${keyResponseMapping}
   </div>
@@ -570,7 +573,7 @@ const endScreen = new lab.html.Screen({
   <div>
   <h1>Kész</h1>
   <p>
-    A kísérlet véget ért, 80%-os pontossággal teljesítetted a tesztet. Köszönjük a részvételt!
+    A kísérlet véget ért, 85%-os pontossággal teljesítetted a tesztet. Köszönjük a részvételt!
   </p>
   <button id="download">Töltsd le az adataid!</button>
   <p>
