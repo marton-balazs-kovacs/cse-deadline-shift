@@ -732,6 +732,11 @@ const endScreen = new lab.html.Screen({
   <p>
     A kísérlet véget ért, 80%-os pontossággal teljesítetted a tesztet. Köszönjük a részvételt!
   </p>
+  <p>
+    A kutatásban való részvételedet a Neptun-kódod megadásával igazolhatod,
+    amit <a target="_blank" href="https://forms.gle/HxaQDSy5wdsStJyM8">ERRE</a> a linkre kattintva tudsz megtenni. Ne feledd, hogy csak akkor kapod meg a pontot,
+    ha a feladat mindkét verzióját teljesíted és mind a kétszer megadod a Neptun-kódodat!
+  </p>
   <button id="download">Töltsd le az adataid!</button>
   <p>
     Ha bármi kérdésed vagy megjegyzésed van, kérlek, vedd fel a kapcsolatot Székely Zsuzsával, a kutatás vezetőjével ezen az email címen: szekely.zsuzsa.mail@gmail.com!
