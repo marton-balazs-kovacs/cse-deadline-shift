@@ -366,16 +366,22 @@ const startPracticeScreen = new lab.html.Screen({
     illetve, hogy melyik gombot melyik ujjaddal kell megnyomnod. 
     A feladatod tehát, hogy ezek alapján reagálj a felvillanó szavak betűszínére. 
     Minden szó megjelenése előtt egy '+' jelet fogsz látni, ez jelzi, hogy a következő szóra kell készülnöd.
-    <br>
-    <br>
-    A gyakorlás megkezdéséhez 
-    helyezd az ujjaid a megfelelő gombokra és nyomd meg a Space billentyűt!
   </p>
+  <br>
+  <h3>Mielőtt elkezded a kísértletet tedd a képernyőt teljes képernyős üzemmódba a következő gombbal!</h3>
+  <button id="fullscreen">Teljes képernyő!</button>
+  <br>
+  <p>A gyakorlás megkezdéséhez helyezd az ujjaid a megfelelő gombokra és nyomd meg a Space billentyűt!</p>
   ${keyResponseMapping}
   </div>
   `,
   responses: {
     'keypress(Space)': 'continue'
+  },
+  events: {
+    'click button#fullscreen': function () {
+      document.body.requestFullscreen()
+    }
   }
 })
 

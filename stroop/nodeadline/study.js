@@ -330,13 +330,22 @@ const startPracticeScreen = new lab.html.Screen({
     illetve, hogy melyik gombot melyik ujjaddal kell megnyomnod. 
     A feladatod tehát, hogy ezek alapján reagálj a felvillanó szavak betűszínére. 
     Minden szó megjelenése előtt egy '+' jelet fogsz látni, ez jelzi, hogy a következő szóra kell készülnöd.
-    A gyakorlás megkezdéséhez helyezd az ujjaid a megfelelő gombokra és nyomd meg a Space billentyűt!
   </p>
+  <br>
+  <h3>Mielőtt elkezded a kísértletet tedd a képernyőt teljes képernyős üzemmódba a következő gombbal!</h3>
+  <button id="fullscreen">Teljes képernyő!</button>
+  <br>
+  <p>A gyakorlás megkezdéséhez helyezd az ujjaid a megfelelő gombokra és nyomd meg a Space billentyűt!</p>
   ${keyResponseMapping}
   </div>
   `,
   responses: {
     'keypress(Space)': 'continue'
+  },
+  events: {
+    'click button#fullscreen': function () {
+      document.body.requestFullscreen()
+    }
   }
 })
 
@@ -580,18 +589,17 @@ const endScreen = new lab.html.Screen({
   amit <a target="_blank" href="https://forms.gle/hp1DTHKD9UsZMcta7">ERRE</a> a linkre kattintva tudsz megtenni. Ne feledd, hogy csak akkor kapod meg a pontot,
   ha a feladat mindkét verzióját teljesíted és mind a kétszer megadod a Neptun-kódodat!
   </p>
-  <button id="download">Töltsd le az adataid!</button>
   <p>
     Ha bármi kérdésed vagy megjegyzésed van, kérlek, vedd fel a kapcsolatot Székely Zsuzsával, a kutatás vezetőjével ezen az email címen: szekely.zsuzsa.mail@gmail.com!
   </p>
   </div>
-  `,
+  `
   // Respond to clicks on the download button
-  events: {
-    'click button#download': function () {
-      this.options.datastore.download()
-    }
-  }
+  // events: {
+  //   'click button#download': function () {
+  //     this.options.datastore.download()
+  //   }
+  // }
 })
 
 const blockLoop = new lab.flow.Sequence({
@@ -646,6 +654,7 @@ const study = new lab.flow.Sequence({
   ],
   messageHandlers: {
     "before:prepare": function () {
+      // Detect browser type on start
       this.data.browser_type = detectBrowser()
     }
   },
