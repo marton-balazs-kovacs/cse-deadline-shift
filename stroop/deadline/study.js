@@ -115,10 +115,10 @@ function getRandomTrials(numberOfTrials, addFirstTrial) {
 }
 
 const testLoopData = [
-  { blockId: '1', testTrialset: getRandomTrials(8, true), calibrationTrialset: getRandomCalbirationTrials(4) },
-  { blockId: '2', testTrialset: getRandomTrials(8, true), calibrationTrialset: getRandomCalbirationTrials(4) },
-  { blockId: '3', testTrialset: getRandomTrials(8, true), calibrationTrialset: getRandomCalbirationTrials(4) },
-  { blockId: '4', testTrialset: getRandomTrials(8, true), calibrationTrialset: getRandomCalbirationTrials(4) },
+  { blockId: '1', testTrialset: getRandomTrials(80, true), calibrationTrialset: getRandomCalbirationTrials(28) },
+  { blockId: '2', testTrialset: getRandomTrials(80, true), calibrationTrialset: getRandomCalbirationTrials(28) },
+  { blockId: '3', testTrialset: getRandomTrials(80, true), calibrationTrialset: getRandomCalbirationTrials(28) },
+  { blockId: '4', testTrialset: getRandomTrials(80, true), calibrationTrialset: getRandomCalbirationTrials(28) },
 ]
 
 // For the calibration trials
@@ -158,7 +158,7 @@ function getRandomCalbirationTrials(numberOfTrials) {
 }
 
 // For practice trials
-const practiceLoopData = getRandomTrials(8, false)
+const practiceLoopData = getRandomTrials(24, false)
 
 // Create screens ----------------------------------------------------------
 // Create inform screen

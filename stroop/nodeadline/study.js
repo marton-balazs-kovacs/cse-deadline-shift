@@ -115,14 +115,14 @@ function getRandomTrials(numberOfTrials, addFirstTrial) {
 }
 
 const testLoopData = [
-  { blockId: '1', testTrialset: getRandomTrials(8, true) },
-  { blockId: '2', testTrialset: getRandomTrials(8, true) },
-  { blockId: '3', testTrialset: getRandomTrials(8, true) },
-  { blockId: '4', testTrialset: getRandomTrials(8, true) },
+  { blockId: '1', testTrialset: getRandomTrials(80, true) },
+  { blockId: '2', testTrialset: getRandomTrials(80, true) },
+  { blockId: '3', testTrialset: getRandomTrials(80, true) },
+  { blockId: '4', testTrialset: getRandomTrials(80, true) },
 ]
 
 // For practice trials
-const practiceLoopData = getRandomTrials(8, false)
+const practiceLoopData = getRandomTrials(24, false)
 
 // Create screens ----------------------------------------------------------
 // Create inform screen
