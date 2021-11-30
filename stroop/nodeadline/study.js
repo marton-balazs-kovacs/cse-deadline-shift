@@ -331,10 +331,6 @@ const startPracticeScreen = new lab.html.Screen({
     A feladatod tehát, hogy ezek alapján reagálj a felvillanó szavak betűszínére. 
     Minden szó megjelenése előtt egy '+' jelet fogsz látni, ez jelzi, hogy a következő szóra kell készülnöd.
   </p>
-  <br>
-  <h3>Mielőtt elkezded a kísértletet tedd a képernyőt teljes képernyős üzemmódba a következő gombbal!</h3>
-  <button id="fullscreen">Teljes képernyő!</button>
-  <br>
   <p>A gyakorlás megkezdéséhez helyezd az ujjaid a megfelelő gombokra és nyomd meg a Space billentyűt!</p>
   ${keyResponseMapping}
   </div>
