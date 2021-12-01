@@ -313,7 +313,7 @@ const instructionsScreen = new lab.html.Screen({
     miközben a feladatot csinálod! Vedd figyelembe, hogy ha a megoldásod pontossága 70%-nál alacsonyabb
     lesz, ami egy ésszerű határ az előző kutatások fényében, akkor nem kapsz pontot a kitöltésért.
     Ha 70% feletti pontossággal oldod meg a feladatot, valamint, ha elvégzed a feladat másik verzióját is,
-    akkor 1 pontot kapsz a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel” nevű kurzuson.
+    akkor 1.5 pontot kapsz a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel” nevű kurzuson.
     Ehhez ne felejtsd el megadni a Neptun-kódod a kísérlet végén!
   </p>
   Nyomd meg a Space billentyűt a folytatáshoz!
@@ -734,18 +734,11 @@ const endScreen = new lab.html.Screen({
     amit <a target="_blank" href="https://forms.gle/HxaQDSy5wdsStJyM8">ERRE</a> a linkre kattintva tudsz megtenni. Ne feledd, hogy csak akkor kapod meg a pontot,
     ha a feladat mindkét verzióját teljesíted és mind a kétszer megadod a Neptun-kódodat!
   </p>
-  <button id="download">Töltsd le az adataid!</button>
   <p>
     Ha bármi kérdésed vagy megjegyzésed van, kérlek, vedd fel a kapcsolatot Székely Zsuzsával, a kutatás vezetőjével ezen az email címen: szekely.zsuzsa.mail@gmail.com!
   </p>
   </div>
-  `,
-  // Respond to clicks on the download button
-  events: {
-    'click button#download': function () {
-      this.options.datastore.download()
-    }
-  }
+  `
 })
 
 const blockLoop = new lab.flow.Sequence({
