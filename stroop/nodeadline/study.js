@@ -1,6 +1,6 @@
 // Utils ----------------------------------------------------------
 // Detect browser
-function detectBrowser() { 
+function detectBrowser() {
   if((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1 ) {
       return 'Opera';
   } else if(navigator.userAgent.indexOf("Chrome") != -1 ) {
@@ -14,7 +14,7 @@ function detectBrowser() {
   } else {
       return 'Unknown';
   }
-} 
+}
 
 // Calculate range
 function range(stop) {
@@ -130,8 +130,8 @@ const informScreen = new lab.html.Screen({
   title: "inform",
   content:
     `
-    <div> 
-    <h1>Tájékoztató nyilatkozat</h1> 
+    <div>
+    <h1>Tájékoztató nyilatkozat</h1>
     <p>
       Egy tudományos kutatásban veszel részt, amelynek témavezetője Dr. Aczél Balázs,
       az ELTE Affektív Pszichológia Tanszékének kutatója. A kutatás célja megvizsgálni
@@ -140,15 +140,15 @@ const informScreen = new lab.html.Screen({
     <p>
       Az ELTE PPK Affektív Pszichológia Tanszék Metatudomány Kutatócsoportja mint
       adatkezelő szigorúan bizalmasan kezel minden olyan személyes információt,
-      amit a kutatás keretein belül gyűjtünk össze. Ezeket kóddal ellátva, 
+      amit a kutatás keretein belül gyűjtünk össze. Ezeket kóddal ellátva,
       biztonságos számítógépeken tároljuk. A kezelt adatok a következők:
       NEPTUN-kód, életkor, nem, iskolai végzettség. Az azonosítására alkalmas
       adatokat (NEPTUN-kód) arra használjuk fel, hogy regisztrálhassuk a
-      kutatásban való részvételért járó kurzuspontokat, ezután törölni fogjuk őket. 
+      kutatásban való részvételért járó kurzuspontokat, ezután törölni fogjuk őket.
       Válaszaid semmilyen módon nem lesznek hozzád köthetők. Személyes adataidat
       más adatkezelőnek, adatfeldolgozónak nem adjuk át, ám az anonimizált
       (személyes azonosításra nem alkalmas) adataid más kutatókkal megosztjuk.
-      E tényállás részleteit a „Hozzájárulás adatkezeléshez” c. dokumentum 
+      E tényállás részleteit a „Hozzájárulás adatkezeléshez” c. dokumentum
       tartalmazza <a target="_blank" href="http://decisionlab.elte.hu/hozzajarulas-adatkezeleshez/">ITT</a>.
       Az adatkezelésről szóló szabályozásról részletesebben pedig
       <a target="_blank" href="https://ppk.elte.hu/file/Hozzajarulas_adatkezeleshez_melleklet_2018.pdf.">ITT</a> tájékozódhatsz.
@@ -193,10 +193,10 @@ informScreen.on('run', () => {
 const consentScreen = new lab.html.Screen({
   title: "consent",
   content: `
-  <div> 
+  <div>
   <h1>Beleegyező nyilatkozat</h1>
   <p>
-    Felelősségem teljes tudatában kijelentem, hogy a mai napon az Eötvös Loránd 
+    Felelősségem teljes tudatában kijelentem, hogy a mai napon az Eötvös Loránd
     Tudományegyetem, Dr. Aczél Balázs kutatásvezető által végzett vizsgálatban
     önként veszek részt. A vizsgálat jellegéről annak megkezdése előtt kielégítő
     tájékoztatást kaptam. Elmúltam 18 éves. Nem szenvedek semmilyen pszichiátriai
@@ -217,7 +217,7 @@ const consentScreen = new lab.html.Screen({
   <input type="radio" name="consent-form" id="disagree">
   <label for="disagree">Nem veszek részt</label>
   <button class="submitBtn hide" id="submitConsent">Tovább</button>
-  </div> 
+  </div>
   `,
   responses: {
     'click(0) button#submitConsent': 'continue'
@@ -259,7 +259,7 @@ const instructionsScreen = new lab.html.Screen({
     <h1 style="color: yellow;">KÉK</h1>
   </div>
   <p>
-    A feladatod az lesz, hogy meghatározd, milyen színnel van írva a szó, 
+    A feladatod az lesz, hogy meghatározd, milyen színnel van írva a szó,
     miközben a szó jelentését figyelmen kívül hagyod. Tehát a fenti 2 példára
     a helyes válaszok a piros és a sárga. Mindegyik szín négy válaszbillentyű (x; c; n; m)
     valamelyikéhez lesz hozzárendelve. Azt, hogy melyik szín melyik válaszbillentyűhöz tartozik,
@@ -267,17 +267,17 @@ const instructionsScreen = new lab.html.Screen({
     amennyire ez lehetséges hibázás nélkül!
   </p>
   <p>
-    A gyakorlást követően a kísérlet 4 szakaszból fog állni, ezek mindegyike kb. 6 percet 
+    A gyakorlást követően a kísérlet 4 szakaszból fog állni, ezek mindegyike kb. 6 percet
     tesz ki (24 perc összesen). A szakaszok között rövid szünetet tarthatsz.
   </p>
   <p>
-    Kérünk, hogy a feladatot számítógépen végezd el (ne telefonon, tableten stb.)! A kísérlet csak Mozilla Firefox 
-    és Safari böngészőkben működik megfelelően, ezért kérünk, hogy ezek valamelyikében végezd el, egy új böngészőablakban! 
+    Kérünk, hogy a feladatot számítógépen végezd el (ne telefonon, tableten stb.)! A kísérlet csak Mozilla Firefox
+    és Safari böngészőkben működik megfelelően, ezért kérünk, hogy ezek valamelyikében végezd el, egy új böngészőablakban!
     Nagyon fontos, hogy a kísérlet során végig tudj összpontosítani, ezért kérünk, hogy ne csinálj semmi mást,
     miközben a feladatot csinálod! Vedd figyelembe, hogy ha a megoldásod pontossága 70%-nál alacsonyabb
     lesz, ami egy ésszerű határ az előző kutatások fényében, akkor nem kapsz pontot a kitöltésért.
     Ha 70% feletti pontossággal oldod meg a feladatot, valamint, ha elvégzed a feladat másik verzióját is,
-    akkor 1 pontot kapsz a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel” nevű kurzuson. 
+    akkor 1 pontot kapsz a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel” nevű kurzuson.
     Ehhez ne felejtsd el megadni a Neptun-kódod a kísérlet végén!
   </p>
   Nyomd meg a Space billentyűt a folytatáshoz!
@@ -326,9 +326,9 @@ const startPracticeScreen = new lab.html.Screen({
   <div>
   <h2>Gyakorlás</2>
   <p>
-    Az alábbi táblázatban láthatod, hogy melyik betűszínhez melyik gomb tartozik, 
-    illetve, hogy melyik gombot melyik ujjaddal kell megnyomnod. 
-    A feladatod tehát, hogy ezek alapján reagálj a felvillanó szavak betűszínére. 
+    Az alábbi táblázatban láthatod, hogy melyik betűszínhez melyik gomb tartozik,
+    illetve, hogy melyik gombot melyik ujjaddal kell megnyomnod.
+    A feladatod tehát, hogy ezek alapján reagálj a felvillanó szavak betűszínére.
     Minden szó megjelenése előtt egy '+' jelet fogsz látni, ez jelzi, hogy a következő szóra kell készülnöd.
   </p>
   <p>A gyakorlás megkezdéséhez helyezd az ujjaid a megfelelő gombokra és nyomd meg a Space billentyűt!</p>
@@ -356,7 +356,7 @@ ${ parameters.word } \
   x = <span class="dot" style="background-color:red;"></span> c = <span class="dot" style="background-color:green;"></span>  n = <span class="dot" style="background-color:blue"></span>  m = <span class="dot" style="background-color:yellow;"></span> \
 </div> \
 </div> \
-' 
+'
 
 // Define sequence for one trial for practice
 var trialPracticeTemplate = new lab.flow.Sequence({
@@ -423,7 +423,7 @@ var trialPracticeTemplate = new lab.flow.Sequence({
         }
       }
     }),
-    // Feedback (or empty) screen for practice only 
+    // Feedback (or empty) screen for practice only
     new lab.html.Screen({
       content: practiceTrialContent,
       parameters: {
@@ -461,7 +461,7 @@ const endPracticeScreen = new lab.html.Screen({
   <p>
     Most következik a négy kísérleti szakasz. Ezek során már nem lesz a képernyőn, hogy melyik színhez
     melyik gomb tartozik, valamint nem fogsz visszajelzést kapni arról, hogy
-    helyesen válaszoltál-e. Tartsd az ujjaid a megfelelő gombokon és nyomd 
+    helyesen válaszoltál-e. Tartsd az ujjaid a megfelelő gombokon és nyomd
     meg a Space billentyűt az első szakasz megkezdéséhez!
   </p>
   ${keyResponseMapping}
@@ -612,10 +612,27 @@ const blockLoop = new lab.flow.Sequence({
     betweenBlockScreen
   ]
 })
+const init = lab.util.fromObject({
+  "title": "root",
+  "type": "lab.flow.Sequence",
+  "parameters": {},
+  "plugins": [
+    {
+      "type": "lab.plugins.Metadata",
+      "path": undefined
+    },
+    {
+      "type": "lab.plugins.Transmit",
+      "url": "backend.php",
+      "path": undefined
+    }
+  ]
+})
 
 // Put together the study
 const study = new lab.flow.Sequence({
   content: [
+    init,
     // Inform screen
     informScreen,
     // Consent screen
