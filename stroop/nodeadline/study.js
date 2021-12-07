@@ -241,6 +241,26 @@ consentScreen.on('run', () => {
   })
 })
 
+// Create neptunScreen
+const neptunScreen = new lab.html.Form({
+  title: "neptunid",
+  content: `
+  <div>
+  <h1>Azonosítás</h1>
+  <p>
+    Kérlek, írd be a NEPTUN kódod az alábbi szövegdobozba.
+    Ez az adataid azonosításához van. A kísérlet végén mégegyszer meg kell add a NEPTUN kódod,
+    hogy megkapd a kísérletért járó pontokat.
+  </p>
+  <form>
+  <label for="fneptun">NEPTUN kód:</label>
+  <input type="text" id="neptun" name="fneptun">
+  <button type="submit">Tovább</button>
+  </form>
+  </div>
+  `
+})
+
 // Create instructions
 const instructionsScreen = new lab.html.Screen({
   title: "instructions",
@@ -577,20 +597,24 @@ const endScreen = new lab.html.Screen({
   </p>
   <p>
   A kutatásban való részvételedet a Neptun-kódod megadásával igazolhatod,
-  amit <a target="_blank" href="https://forms.gle/hp1DTHKD9UsZMcta7">ERRE</a> a linkre kattintva tudsz megtenni. Ne feledd, hogy csak akkor kapod meg a pontot,
-  ha a feladat mindkét verzióját teljesíted és mind a kétszer megadod a Neptun-kódodat!
+  amit <a target="_blank" href="https://forms.gle/hp1DTHKD9UsZMcta7">ERRE</a> a linkre kattintva tudsz megtenni.
   </p>
   <p>
-    Ha bármi kérdésed vagy megjegyzésed van, kérlek, vedd fel a kapcsolatot Székely Zsuzsával, a kutatás vezetőjével ezen az email címen: szekely.zsuzsa.mail@gmail.com!
+  Kérünk, a következő gombra kattintva töltsd le az adataidat, és küldd el Székely Zsuzsának a szekely.zsuzsa.mail@gmail.com email címre!
+  A pontszerzés előfeltétele, hogy teljesítsd ezt a feladatot.
+  </p>
+  <button id="download">Töltsd le az adataid!</button>
+  <p>
+    Ha bármi kérdésed vagy megjegyzésed van, kérlek, vedd fel a kapcsolatot Székely Zsuzsával, a kutatás vezetőjével emailen!
   </p>
   </div>
-  `
+  `,
   // Respond to clicks on the download button
-  // events: {
-  //   'click button#download': function () {
-  //     this.options.datastore.download()
-  //   }
-  // }
+  events: {
+    'click button#download': function () {
+      this.options.datastore.download()
+    }
+  }
 })
 
 const blockLoop = new lab.flow.Sequence({
@@ -620,6 +644,8 @@ const study = new lab.flow.Sequence({
     informScreen,
     // Consent screen
     consentScreen,
+    // Neptun id
+    neptunScreen,
     // Instructions
     instructionsScreen,
     // Start of practice trials

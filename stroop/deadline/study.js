@@ -277,6 +277,26 @@ consentScreen.on('run', () => {
   })
 })
 
+// Create neptunScreen
+const neptunScreen = new lab.html.Form({
+  title: "neptunid",
+  content: `
+  <div>
+  <h1>Azonosítás</h1>
+  <p>
+    Kérlek, írd be a NEPTUN kódod az alábbi szövegdobozba.
+    Ez az adataid azonosításához van. A kísérlet végén mégegyszer meg kell add a NEPTUN kódod,
+    hogy megkapd a kísérletért járó pontokat.
+  </p>
+  <form>
+  <label for="fneptun">NEPTUN kód:</label>
+  <input type="text" id="neptun" name="fneptun">
+  <button type="submit">Tovább</button>
+  </form>
+  </div>
+  `
+})
+
 // Create instructions
 const instructionsScreen = new lab.html.Screen({
   title: "instructions",
@@ -727,16 +747,19 @@ const endScreen = new lab.html.Screen({
   <div>
   <h1>Kész</h1>
   <p>
-    A kísérlet véget ért, 80%-os pontossággal teljesítetted a tesztet. Köszönjük a részvételt!
+    A kísérlet véget ért, 85%-os pontossággal teljesítetted a tesztet. Köszönjük a részvételt!
   </p>
   <p>
-    A kutatásban való részvételedet a Neptun-kódod megadásával igazolhatod,
-    amit <a target="_blank" href="https://forms.gle/HxaQDSy5wdsStJyM8">ERRE</a> a linkre kattintva tudsz megtenni. Ne feledd, hogy csak akkor kapod meg a pontot,
-    ha a feladat mindkét verzióját teljesíted és mind a kétszer megadod a Neptun-kódodat!
+  A kutatásban való részvételedet a Neptun-kódod megadásával igazolhatod,
+  amit <a target="_blank" href="https://forms.gle/hp1DTHKD9UsZMcta7">ERRE</a> a linkre kattintva tudsz megtenni.
+  </p>
+  <p>
+  Kérünk, a következő gombra kattintva töltsd le az adataidat, és küldd el Székely Zsuzsának a szekely.zsuzsa.mail@gmail.com email címre!
+  A pontszerzés előfeltétele, hogy teljesítsd ezt a feladatot.
   </p>
   <button id="download">Töltsd le az adataid!</button>
   <p>
-    Ha bármi kérdésed vagy megjegyzésed van, kérlek, vedd fel a kapcsolatot Székely Zsuzsával, a kutatás vezetőjével ezen az email címen: szekely.zsuzsa.mail@gmail.com!
+    Ha bármi kérdésed vagy megjegyzésed van, kérlek, vedd fel a kapcsolatot Székely Zsuzsával, a kutatás vezetőjével emailen!
   </p>
   </div>
   `,
@@ -805,6 +828,8 @@ const study = new lab.flow.Sequence({
     informScreen,
     // Consent screen
     consentScreen,
+    // Neptun id
+    neptunScreen,
     // Instructions
     instructionsScreen,
     // Start of practice trials
