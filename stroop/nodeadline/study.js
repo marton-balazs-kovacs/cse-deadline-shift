@@ -287,18 +287,18 @@ const instructionsScreen = new lab.html.Screen({
     amennyire ez lehetséges hibázás nélkül!
   </p>
   <p>
-    A gyakorlást követően a kísérlet 4 szakaszból fog állni, ezek mindegyike kb. 6 percet 
-    tesz ki (24 perc összesen). A szakaszok között rövid szünetet tarthatsz.
+    A gyakorlást követően a kísérlet 4 szakaszból fog állni, ezek mindegyike 2 részre ('A' és 'B') oszlik.
+    A 4 szakasz egyenként kb. 8 percet vesz igénybe, közöttük rövid szünetet tarthatsz.
   </p>
   <p>
-    Kérünk, hogy a feladatot számítógépen végezd el (ne telefonon, tableten stb.)! A kísérlet csak Mozilla Firefox 
+    Kérünk, hogy a feladatot számítógépen végezd el (ne telefonon, tableten stb.)!  A kísérlet csak Mozilla Firefox 
     és Safari böngészőkben működik megfelelően, ezért kérünk, hogy ezek valamelyikében végezd el, egy új böngészőablakban! 
     Nagyon fontos, hogy a kísérlet során végig tudj összpontosítani, ezért kérünk, hogy ne csinálj semmi mást,
     miközben a feladatot csinálod! Vedd figyelembe, hogy ha a megoldásod pontossága 70%-nál alacsonyabb
     lesz, ami egy ésszerű határ az előző kutatások fényében, akkor nem kapsz pontot a kitöltésért.
-    Ha 70% feletti pontossággal oldod meg a feladatot, valamint, ha elvégzed a feladat másik verzióját is,
-    akkor 1 pontot kapsz a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel” nevű kurzuson. 
-    Ehhez ne felejtsd el megadni a Neptun-kódod a kísérlet végén!
+    Ha 70% feletti pontossággal oldod meg a feladatot, akkor 1 pontot kapsz a „Pszichológiai kísérletben és tudományos aktivitásban való részvétel”
+    nevű kurzuson.
+    Ehhez ne felejtsd el megadni a Neptun-kódod a kísérlet végén is!
   </p>
   Nyomd meg a Space billentyűt a folytatáshoz!
   </div>
