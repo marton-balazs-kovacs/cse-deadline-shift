@@ -337,11 +337,6 @@ const startPracticeScreen = new lab.html.Screen({
   `,
   responses: {
     'keypress(Space)': 'continue'
-  },
-  events: {
-    'click button#fullscreen': function () {
-      document.body.requestFullscreen()
-    }
   }
 })
 
