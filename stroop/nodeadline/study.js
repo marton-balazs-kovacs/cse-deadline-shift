@@ -597,7 +597,7 @@ const endScreen = new lab.html.Screen({
   </p>
   <p>
   A kutatásban való részvételedet a Neptun-kódod megadásával igazolhatod,
-  amit <a target="_blank" href="https://forms.gle/hp1DTHKD9UsZMcta7">ERRE</a> a linkre kattintva tudsz megtenni.
+  amit <a target="_blank" href="https://forms.gle/8DsdRtuC88zUjgfs9">ERRE</a> a linkre kattintva tudsz megtenni.
   </p>
   <p>
   Kérünk, a következő gombra kattintva töltsd le az adataidat, és küldd el Székely Zsuzsának a szekely.zsuzsa.mail@gmail.com email címre!
